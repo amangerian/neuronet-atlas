@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroNet Atlas — Pyramidal Neuron &amp; GABAergic Interneurons</title>
+<style>
+  :root{--bg:#eef1f8;--panel:#fff;--panel2:#f5f7fc;--line:#e0e5f0;--line2:#eef1f8;--ink:#1d2536;--muted:#5c667a;--faint:#98a1b4;
+    --pyr:#2f6fd0;--pv:#e03131;--ch:#d6336c;--sst:#e8590c;--vip:#7048e8;--ngf:#0ca678;--accent:#5b4bd6}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{background:radial-gradient(1100px 620px at 82% -8%,#fff 0%,var(--bg) 52%) fixed,var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:#2f6fd0;text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px 70px}
+  header.top{padding:36px 0 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .brand{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+  .brand .logo{width:42px;height:42px;border-radius:12px;flex:none;background:linear-gradient(135deg,#5b4bd6,#3f8bff 60%,#2f9e44);box-shadow:0 8px 22px rgba(91,75,214,.28);position:relative}
+  .brand .logo::after{content:"";position:absolute;inset:9px;border-radius:50%;border:2px solid rgba(255,255,255,.95);
+    background:radial-gradient(3px 3px at 50% 20%,#fff 60%,transparent),radial-gradient(3px 3px at 22% 60%,#fff 60%,transparent),radial-gradient(3px 3px at 78% 62%,#fff 60%,transparent)}
+  .brand h1{font-size:14px;letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--muted);font-weight:600}
+  .brand h1 b{color:var(--ink);font-weight:800}
+  h2{font-size:33px;margin:6px 0 8px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14.5px;max-width:860px;margin:0}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .nav a{font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)}
+  .nav a:hover{border-color:#b9c2d8;text-decoration:none}
+  .nav a.cur{background:#1d2536;color:#fff;border-color:#1d2536}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 18px 44px -26px rgba(30,45,90,.32);margin-bottom:22px}
+  .chead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--panel2);flex-wrap:wrap}
+  .chead .t{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .ctrls{display:flex;gap:6px;flex-wrap:wrap}
+  .ctrls button{font:inherit;font-size:12px;font-weight:650;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:6px 11px;border-radius:8px;cursor:pointer}
+  .ctrls button:hover{color:var(--ink);border-color:#c3ccdd}.ctrls button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .grid{display:grid;grid-template-columns:1fr 310px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .stage{position:relative;background:radial-gradient(700px 460px at 50% 8%,#fbfcff 0%,#f3f6fc 78%)}
+  .side{border-left:1px solid var(--line);background:var(--panel2);padding:15px 16px}
+  @media(max-width:880px){.side{border-left:none;border-top:1px solid var(--line)}}
+  .side .sh{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);font-weight:800;margin-bottom:9px}
+  .celllist{margin-bottom:14px}
+  .cbtn{display:block;width:100%;text-align:left;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);background:var(--panel);
+    border:1.5px solid var(--line);border-radius:10px;padding:8px 11px;margin-bottom:6px;cursor:pointer;transition:.14s}
+  .cbtn:hover{border-color:#b9c2d8}.cbtn.on{box-shadow:0 0 0 2px rgba(91,75,214,.16)}
+  .cbtn .cd{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:8px}
+  .cbtn .ct{display:block;font-size:10.5px;font-weight:600;color:var(--faint);margin-top:2px;margin-left:18px}
+  .dname{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;margin-bottom:2px}
+  .dname .dd{width:12px;height:12px;border-radius:50%}
+  .dsub{font-size:11.5px;color:var(--faint);font-style:italic;margin-bottom:11px}
+  .drow{margin-bottom:9px}
+  .drow .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:800;margin-bottom:2px}
+  .drow .v{font-size:12.5px;color:var(--muted);line-height:1.45}.drow .v b{color:var(--ink)}
+  .legend{display:flex;flex-wrap:wrap;gap:11px 18px;padding:12px 18px;border-top:1px solid var(--line);background:var(--panel2);font-size:11.5px;color:var(--muted)}
+  .legend .li{display:flex;align-items:center;gap:7px}
+  .legend .sw{width:12px;height:12px;border-radius:50%}
+  .block{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px 19px;margin-bottom:18px}
+  .block h4{margin:0 0 12px;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:9px}
+  .block h4 .bar{width:22px;height:3px;border-radius:2px;background:var(--accent)}
+  .block p{font-size:14px;color:var(--muted);margin:0 0 11px;max-width:900px}.block p:last-child{margin-bottom:0}.block p b{color:var(--ink)}
+  .tw{overflow-x:auto}
+  .itable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:700px}
+  .itable th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:800;padding:0 10px 9px 0}
+  .itable td{padding:10px 10px 10px 0;border-top:1px solid var(--line2);color:var(--muted);vertical-align:top;line-height:1.45}
+  .itable td.cn{font-weight:750;color:var(--ink);white-space:nowrap}
+  .itable td.cn i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:7px}
+  footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12px}
+  @media(max-width:720px){
+    .wrap{padding:0 13px 50px}h2{font-size:24px}.sub{font-size:13.5px}
+    header.top{padding:24px 0 14px}.brand .logo{width:36px;height:36px}.brand h1{font-size:11.5px}
+    .stage{overflow-x:auto;-webkit-overflow-scrolling:touch}.stage svg{min-width:600px}
+    .block{padding:14px 15px}.block p{font-size:13.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo"></div><h1><b>NeuroNet Atlas</b> · Cellular &amp; Columnar Scale</h1></div>
+    <h2>Pyramidal Neuron &amp; GABAergic Interneurons</h2>
+    <p class="sub">About 80% of cortical neurons are excitatory pyramidal cells; the remaining ~20% are GABAergic interneurons. What makes the inhibitory system powerful is that different interneuron classes target <b>different compartments</b> of the same pyramidal cell — and each compartment does a different computational job. Click a cell type to see where it lands and what it controls.</p>
+    <div class="nav">
+      <a href="index.html">← Network Atlas</a>
+      <a href="cortical-column.html">Cortical Column</a>
+      <a href="pyramidal-neuron.html" class="cur">Pyramidal Neuron &amp; Interneurons</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="chead"><span class="t">Compartment-specific inhibition</span>
+      <div class="ctrls" id="ctl">
+        <button data-a="all" class="on">Show all</button>
+        <button data-a="fire">⚡ Fire selected</button>
+        <button data-a="disinhib">▶ Disinhibition motif</button>
+      </div></div>
+    <div class="grid">
+      <div class="stage" id="stage"><svg id="neu" viewBox="0 0 620 640"></svg></div>
+      <div class="side">
+        <div class="sh">Interneuron classes</div>
+        <div class="celllist" id="celllist"></div>
+        <div class="sh">Detail</div>
+        <div id="detail"></div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="li"><span class="sw" style="background:#2f6fd0"></span>Pyramidal (excitatory)</div>
+      <div class="li"><span class="sw" style="background:#e03131"></span>PV basket → soma</div>
+      <div class="li"><span class="sw" style="background:#d6336c"></span>Chandelier → axon initial segment</div>
+      <div class="li"><span class="sw" style="background:#e8590c"></span>SST/Martinotti → apical tuft</div>
+      <div class="li"><span class="sw" style="background:#7048e8"></span>VIP → inhibits SST</div>
+      <div class="li"><span class="sw" style="background:#0ca678"></span>Neurogliaform → volume GABA</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>Why compartment targeting is the whole point</h4>
+    <p>A pyramidal neuron is not a single summing point. Its <b>basal dendrites</b> receive feedforward drive, its <b>apical tuft</b> in layer 1 receives top-down context, its <b>soma</b> integrates toward threshold, and its <b>axon initial segment</b> is where the spike is actually generated. Because each interneuron class targets one of these compartments selectively, inhibition is not a single volume knob — it is a set of independent controls over distinct stages of the computation.</p>
+    <p>So <b>PV basket cells</b>, sitting on the soma, act like a gain and timing control on the output: they set how much excitation is needed to fire and enforce the rhythmic windows that produce gamma oscillations. <b>Chandelier cells</b>, uniquely targeting the axon initial segment, sit at the very last checkpoint before a spike. <b>SST/Martinotti cells</b>, reaching up into layer 1, veto the top-down contextual input before it ever reaches the soma. And <b>VIP cells</b> mostly do not touch pyramidal cells at all — they inhibit the SST cells, and so <i>release</i> the apical tuft. That disinhibitory motif is how arousal, locomotion and attention open the cortex to top-down influence.</p>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>The classes side by side</h4>
+    <div class="tw"><table class="itable" id="itable"></table></div>
+    <p style="margin-top:12px;font-size:12.5px">PV, SST and VIP cells are largely non-overlapping and together account for the great majority of cortical GABAergic neurons; the remaining group is dominated by layer-1 NDNF/neurogliaform cells. This three-plus-one scheme is the standard modern classification.</p>
+  </div>
+
+  <div class="card" id="szcard">
+    <div class="chead"><span class="t">Zoom · receptor-level pathophysiology in schizophrenia</span>
+      <div class="ctrls" id="szctl"><button data-a="cascade">▶ Play disinhibition cascade</button><button data-a="reset">↻ Reset</button></div></div>
+    <div class="grid">
+      <div class="stage" id="szstage"><svg id="szsvg" viewBox="0 0 620 520"></svg></div>
+      <div class="side">
+        <div class="sh">Molecular sites — click a numbered marker</div>
+        <div class="celllist" id="szlist"></div>
+        <div class="sh">Detail</div>
+        <div id="szdetail"></div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="li"><span class="sw" style="background:#2f6fd0"></span>Glutamatergic (excitatory)</div>
+      <div class="li"><span class="sw" style="background:#e03131"></span>PV interneuron / GABAergic</div>
+      <div class="li"><span class="sw" style="background:#f59f00"></span>Dopaminergic</div>
+      <div class="li"><span class="sw" style="background:#0ca678"></span>Microglial pruning</div>
+      <div class="li">▼ reduced · ▲ increased</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>The disinhibition cascade</h4>
+    <p>The dominant circuit-level account of schizophrenia begins not in the pyramidal cell but in the <b>PV interneuron</b>. NMDA receptors on fast-spiking PV cells appear to be hypofunctional — the observation that motivated the whole hypothesis is that NMDA-receptor antagonists such as ketamine and PCP reproduce positive, negative <i>and</i> cognitive symptoms in healthy people, which no dopaminergic drug does.</p>
+    <p>Because PV cells are themselves driven by NMDA receptors, hypofunction there means <b>less excitatory drive onto the inhibitory cell</b>, so the PV cell fires less, releases less GABA, and the pyramidal cells it normally restrains become <b>disinhibited</b>. The downstream consequence is excess and poorly-timed glutamate release, degraded gamma synchrony (PV cells are the gamma generators), and a cortex whose signal-to-noise is compromised. That is the cellular story that sits underneath the "destabilised, poorly-segregated" networks schizophrenia shows at whole-brain scale in the main atlas.</p>
+    <p>The GABAergic side shows a coherent set of post-mortem changes: <b>GAD67 reduced</b> (less GABA synthesised), <b>parvalbumin reduced</b>, <b>GAT-1 reduced</b> in chandelier cartridges, and — revealingly — <b>GABA<sub>A</sub> α2 receptors increased</b> on the pyramidal axon initial segment. That last one runs in the opposite direction to the others and is generally read as a <i>compensatory</i> upregulation: the postsynaptic cell adding receptors because less GABA is arriving.</p>
+    <p><b>A caution on causality.</b> These are convergent findings, not a demonstrated sequence. Post-mortem tissue reflects a lifetime of illness and antipsychotic exposure; the NMDA-hypofunction model is inferred largely from pharmacological challenge in healthy volunteers; and the dopamine and glutamate accounts have never been fully unified. What is genuinely well established is the <i>pattern</i>: reduced PV-interneuron function and elevated presynaptic striatal dopamine capacity are among the most replicated biological findings in the disorder.</p>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>Connecting down from the network models</h4>
+    <p>The excitation–inhibition balance implemented by these cells is the microscale substrate of several macroscale claims in the main atlas. The <b>attractor account of OCD</b> rests on deepened basins produced by excess recurrent excitation — Rolls and colleagues modelled this explicitly as increased NMDA/AMPA conductance, with increased GABAergic drive partially reversing it. In <b>schizophrenia</b>, reduced PV-interneuron function is one of the most replicated cellular findings, and PV cells are precisely the cells that generate gamma rhythms and control pyramidal output gain — a plausible cellular route to the destabilised, poorly-segregated networks seen at whole-brain scale.</p>
+    <p>The direction of inference matters though: these are convergent stories across scales, not a demonstrated causal chain from interneuron to fMRI network.</p>
+  </div>
+
+  <footer>Schematic teaching diagram. Morphologies, laminar positions and connection weights are stylised for clarity; real interneuron taxonomy is considerably richer, with substantial diversity within each molecular class. Not a substitute for a primary anatomical source.</footer>
+</div>
+
+<script>
+const SVGNS="http://www.w3.org/2000/svg";
+function el(t,a={},p){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+const svg=document.getElementById('neu');
+const CELLS=[
+ {id:'pv',name:'PV basket cell',c:'#e03131',short:'Parvalbumin+ · perisomatic',
+  target:'<b>Soma and proximal dendrites</b>',
+  marker:'Parvalbumin (PV)',firing:'Fast-spiking, non-adapting; can sustain very high rates',
+  fn:'Sets the <b>gain and timing of output</b>. By clamping the soma it determines how much excitation is needed to fire, and it enforces narrow temporal windows for spiking.',
+  osc:'The principal generator of <b>gamma oscillations</b> (~30–80 Hz).',
+  note:'Reduced PV-cell function is among the most replicated cellular findings in schizophrenia.'},
+ {id:'ch',name:'Chandelier (axo-axonic) cell',c:'#d6336c',short:'PV+ · axon initial segment',
+  target:'<b>Axon initial segment only</b> — the most specific targeting in cortex',
+  marker:'Parvalbumin (PV), distinct morphological subtype',firing:'Fast-spiking',
+  fn:'Sits at the <b>final checkpoint before a spike</b>. Its vertical "cartridges" of boutons line the axon initial segment, where the action potential is initiated.',
+  osc:'Powerful veto over spike initiation, independent of dendritic processing.',
+  note:'Its effect can be depolarising rather than hyperpolarising depending on chloride gradients in the initial segment — an unresolved and interesting complication.'},
+ {id:'sst',name:'SST / Martinotti cell',c:'#e8590c',short:'Somatostatin+ · distal dendrite',
+  target:'<b>Distal apical dendrites and tuft in layer 1</b>',
+  marker:'Somatostatin (SST)',firing:'Regular-spiking, strongly adapting; low threshold',
+  fn:'Vetoes <b>top-down contextual input</b> before it reaches the soma, gating dendritic integration and controlling dendritic calcium spikes.',
+  osc:'Recruited by sustained local pyramidal firing — a classic <b>feedback inhibition</b> loop that prevents runaway excitation.',
+  note:'Because it acts on the apical tuft, it specifically controls how much layer-1 feedback influences the cell — the "context" channel.'},
+ {id:'vip',name:'VIP interneuron',c:'#7048e8',short:'VIP+ · disinhibitory',
+  target:'<b>Other interneurons — chiefly SST cells</b>, not pyramidal cells',
+  marker:'Vasoactive intestinal peptide (VIP)',firing:'Irregular / adapting',
+  fn:'Implements <b>disinhibition</b>. By inhibiting SST cells it lifts the brake on the apical tuft, letting top-down input through.',
+  osc:'Driven by long-range top-down input and by neuromodulators (acetylcholine), and strongly modulated by behavioural state — arousal, locomotion, attention.',
+  note:'This is the main mechanism by which attention and arousal open the cortex to contextual influence.'},
+ {id:'ngf',name:'Neurogliaform / NDNF cell',c:'#0ca678',short:'Layer 1 · volume transmission',
+  target:'<b>Distal apical tufts in layer 1</b>, via diffuse release',
+  marker:'NDNF; neurogliaform morphology',firing:'Late-spiking',
+  fn:'Releases GABA into the extracellular space rather than at conventional synapses — <b>volume transmission</b> — producing slow, spatially broad inhibition.',
+  osc:'Recruits both GABA<sub>A</sub> and slow GABA<sub>B</sub> receptors, giving unusually long-lasting inhibition.',
+  note:'Well placed to damp the entire layer-1 feedback channel at once, rather than cell by cell.'}
+];
+let sel='pv',showAll=true,anim=null;
+
+/* ---------- geometry ---------- */
+const SOMA=[300,392], AIS=[300,432];
+function build(){
+  svg.innerHTML='';
+  const defs=el('defs',{},svg);
+  /* layer bands */
+  [['L1',40,104,'#9c36b5'],['L2/3',104,300,'#d6336c'],['L5',300,470,'#e8590c'],['L6',470,560,'#0b7285']].forEach(b=>{
+    el('rect',{x:36,y:b[1],width:548,height:b[2]-b[1],fill:b[3],'fill-opacity':0.05},svg);
+    el('text',{x:44,y:b[1]+15,'font-size':'10.5','font-weight':'800',fill:b[3],'fill-opacity':0.75},svg).textContent=b[0];
+    el('line',{x1:36,y1:b[1],x2:584,y2:b[1],stroke:b[3],'stroke-opacity':0.18},svg);});
+
+  /* ---- pyramidal neuron ---- */
+  const P=el('g',{},svg);
+  /* apical trunk */
+  el('path',{d:'M300 392 L300 120',stroke:'#2f6fd0','stroke-width':5,fill:'none','stroke-linecap':'round'},P);
+  /* apical tuft */
+  [[300,120,250,64],[300,120,300,54],[300,120,352,66],[300,120,222,86],[300,120,378,88]].forEach(t=>{
+    el('path',{d:`M${t[0]} ${t[1]} Q${(t[0]+t[2])/2} ${t[1]-26} ${t[2]} ${t[3]}`,stroke:'#2f6fd0','stroke-width':2.6,fill:'none','stroke-linecap':'round'},P);});
+  /* oblique dendrites */
+  [[300,200,244,176],[300,236,356,214],[300,286,240,266],[300,316,358,300]].forEach(o=>{
+    el('path',{d:`M${o[0]} ${o[1]} L${o[2]} ${o[3]}`,stroke:'#2f6fd0','stroke-width':2.2,fill:'none','stroke-linecap':'round'},P);});
+  /* basal dendrites */
+  [[248,420],[214,404],[352,420],[386,404],[268,432],[332,432]].forEach(b=>{
+    el('path',{d:`M300 400 Q${(300+b[0])/2} ${b[1]-6} ${b[0]} ${b[1]}`,stroke:'#2f6fd0','stroke-width':2.4,fill:'none','stroke-linecap':'round'},P);});
+  /* soma (triangle) */
+  el('path',{d:'M300 366 L322 404 L278 404 Z',fill:'#2f6fd0',stroke:'#1f4e94','stroke-width':1.5,id:'soma'},P);
+  /* axon initial segment + axon */
+  el('path',{d:'M300 404 L300 440',stroke:'#1f4e94','stroke-width':4.5,id:'ais'},P);
+  el('path',{d:'M300 440 L300 560',stroke:'#2f6fd0','stroke-width':2.6,fill:'none'},P);
+  el('path',{d:'M300 500 L246 520',stroke:'#2f6fd0','stroke-width':1.8,fill:'none'},P);
+  el('text',{x:312,y:382,'font-size':'11','font-weight':'800',fill:'#1f4e94'},P).textContent='soma';
+  el('text',{x:312,y:428,'font-size':'10','font-weight':'700',fill:'#1f4e94'},P).textContent='AIS';
+  el('text',{x:300,y:44,'text-anchor':'middle','font-size':'11','font-weight':'800',fill:'#2f6fd0'},P).textContent='apical tuft';
+  el('text',{x:196,y:446,'font-size':'10','font-weight':'700',fill:'#2f6fd0'},P).textContent='basal dendrites';
+  el('text',{x:308,y:556,'font-size':'10','font-weight':'700',fill:'#2f6fd0'},P).textContent='axon →';
+
+  /* ---- interneurons ---- */
+  const G=el('g',{},svg);
+  /* PV basket: left of soma, axon wraps soma */
+  const pv=el('g',{'data-c':'pv',style:'cursor:pointer'},G);
+  el('circle',{cx:172,cy:392,r:17,fill:'#e03131','fill-opacity':0.9},pv);
+  el('text',{x:172,y:397,'text-anchor':'middle','font-size':'11','font-weight':'800',fill:'#fff'},pv).textContent='PV';
+  el('path',{d:'M189 392 Q236 392 262 388',stroke:'#e03131','stroke-width':2.4,fill:'none'},pv);
+  el('path',{d:'M262 388 Q286 372 300 386 Q312 400 292 408 Q272 414 264 398',stroke:'#e03131','stroke-width':2.4,fill:'none'},pv);
+  [[268,382],[276,404],[292,410],[262,396]].forEach(b=>el('circle',{cx:b[0],cy:b[1],r:3.4,fill:'#e03131'},pv));
+  el('text',{x:140,y:420,'font-size':'9.5','font-weight':'700',fill:'#e03131'},pv).textContent='basket';
+
+  /* Chandelier: right, cartridges on AIS */
+  const ch=el('g',{'data-c':'ch',style:'cursor:pointer'},G);
+  el('circle',{cx:424,cy:452,r:16,fill:'#d6336c','fill-opacity':0.9},ch);
+  el('text',{x:424,y:457,'text-anchor':'middle','font-size':'9.5','font-weight':'800',fill:'#fff'},ch).textContent='ChC';
+  el('path',{d:'M408 452 Q356 452 322 440',stroke:'#d6336c','stroke-width':2.4,fill:'none'},ch);
+  [0,1,2,3].forEach(i=>{el('path',{d:`M${312+i*0} ${412+i*8} L306 ${412+i*8}`,stroke:'#d6336c','stroke-width':2.6},ch);
+    el('circle',{cx:306,cy:412+i*8,r:2.8,fill:'#d6336c'},ch);});
+  el('text',{x:400,y:480,'font-size':'9.5','font-weight':'700',fill:'#d6336c'},ch).textContent='axo-axonic';
+
+  /* SST Martinotti: left, ascends to tuft */
+  const sst=el('g',{'data-c':'sst',style:'cursor:pointer'},G);
+  el('circle',{cx:150,cy:300,r:17,fill:'#e8590c','fill-opacity':0.9},sst);
+  el('text',{x:150,y:305,'text-anchor':'middle','font-size':'10','font-weight':'800',fill:'#fff'},sst).textContent='SST';
+  el('path',{d:'M150 283 Q146 180 178 108 Q210 78 250 70',stroke:'#e8590c','stroke-width':2.4,fill:'none'},sst);
+  el('path',{d:'M198 96 Q236 76 286 62',stroke:'#e8590c','stroke-width':2,fill:'none'},sst);
+  [[250,70],[286,62],[224,84]].forEach(b=>el('circle',{cx:b[0],cy:b[1],r:3.4,fill:'#e8590c'},sst));
+  el('path',{d:'M167 296 Q230 356 282 380',stroke:'#e8590c','stroke-width':1.6,fill:'none','stroke-dasharray':'3 3','stroke-opacity':0.55},sst);
+  el('text',{x:112,y:332,'font-size':'9.5','font-weight':'700',fill:'#e8590c'},sst).textContent='Martinotti';
+
+  /* VIP: upper left, inhibits SST */
+  const vip=el('g',{'data-c':'vip',style:'cursor:pointer'},G);
+  el('circle',{cx:106,cy:196,r:15,fill:'#7048e8','fill-opacity':0.9},vip);
+  el('text',{x:106,y:201,'text-anchor':'middle','font-size':'9.5','font-weight':'800',fill:'#fff'},vip).textContent='VIP';
+  el('path',{d:'M110 211 Q126 258 144 283',stroke:'#7048e8','stroke-width':2.4,fill:'none',id:'vip2sst'},vip);
+  el('circle',{cx:144,cy:283,r:3.6,fill:'#7048e8'},vip);
+  el('text',{x:64,y:180,'font-size':'9.5','font-weight':'700',fill:'#7048e8'},vip).textContent='disinhibitory';
+
+  /* Neurogliaform L1 */
+  const ngf=el('g',{'data-c':'ngf',style:'cursor:pointer'},G);
+  el('circle',{cx:430,cy:74,r:15,fill:'#0ca678','fill-opacity':0.9},ngf);
+  el('text',{x:430,y:78,'text-anchor':'middle','font-size':'9','font-weight':'800',fill:'#fff'},ngf).textContent='NGF';
+  el('circle',{cx:430,cy:74,r:30,fill:'#0ca678','fill-opacity':0.13,id:'ngfcloud'},ngf);
+  el('circle',{cx:430,cy:74,r:44,fill:'#0ca678','fill-opacity':0.07},ngf);
+  el('path',{d:'M415 74 Q384 68 356 66',stroke:'#0ca678','stroke-width':2,fill:'none','stroke-dasharray':'4 3'},ngf);
+  el('text',{x:392,y:118,'font-size':'9.5','font-weight':'700',fill:'#0ca678'},ngf).textContent='volume GABA';
+
+  G.querySelectorAll('[data-c]').forEach(g=>g.addEventListener('click',()=>pick(g.dataset.c)));
+  el('g',{id:'fx'},svg);
+}
+function pick(id){sel=id;
+  document.querySelectorAll('.cbtn').forEach(b=>b.classList.toggle('on',b.dataset.c===id));
+  const c=CELLS.find(x=>x.id===id);
+  document.getElementById('detail').innerHTML=
+   `<div class="dname"><span class="dd" style="background:${c.c}"></span>${c.name}</div><div class="dsub">${c.short}</div>
+    <div class="drow"><div class="k">Targets</div><div class="v">${c.target}</div></div>
+    <div class="drow"><div class="k">Marker</div><div class="v">${c.marker}</div></div>
+    <div class="drow"><div class="k">Firing</div><div class="v">${c.firing}</div></div>
+    <div class="drow"><div class="k">What it controls</div><div class="v">${c.fn}</div></div>
+    <div class="drow"><div class="k">Dynamics</div><div class="v">${c.osc}</div></div>
+    <div class="drow"><div class="k">Note</div><div class="v">${c.note}</div></div>`;
+  if(!showAll)applyFocus();
+}
+function applyFocus(){svg.querySelectorAll('[data-c]').forEach(g=>g.setAttribute('opacity',showAll?1:(g.dataset.c===sel?1:0.13)));}
+/* pulse effect on the targeted compartment */
+function fire(){
+  const fx=document.getElementById('fx');fx.innerHTML='';
+  const T={pv:[300,388,26],ch:[303,426,20],sst:[290,72,44],vip:[144,283,20],ngf:[400,68,46]}[sel];
+  const c=CELLS.find(x=>x.id===sel).c;
+  const ring=el('circle',{cx:T[0],cy:T[1],r:6,fill:'none',stroke:c,'stroke-width':3},fx);
+  let r=6;(function step(){r+=1.4;ring.setAttribute('r',r);ring.setAttribute('stroke-opacity',Math.max(0,1-(r-6)/T[2]));
+    if(r-6<T[2])requestAnimationFrame(step);else fx.innerHTML='';})();
+  /* soma dims if perisomatic/AIS inhibition */
+  if(sel==='pv'||sel==='ch'){const s=document.getElementById(sel==='pv'?'soma':'ais');const o=s.getAttribute('fill-opacity');
+    s.setAttribute('opacity',0.35);setTimeout(()=>s.setAttribute('opacity',1),650);}
+}
+/* VIP → SST → tuft release */
+function disinhib(){
+  const fx=document.getElementById('fx');fx.innerHTML='';
+  const seq=[{p:[106,196],c:'#7048e8',t:'VIP fires'},{p:[150,300],c:'#e8590c',t:'SST inhibited'},{p:[290,72],c:'#2f6fd0',t:'apical tuft released'}];
+  let i=0;
+  (function nxt(){if(i>=seq.length){setTimeout(()=>fx.innerHTML='',900);return;}
+    const s=seq[i++];const g=el('g',{},fx);
+    const ring=el('circle',{cx:s.p[0],cy:s.p[1],r:8,fill:'none',stroke:s.c,'stroke-width':3.4},g);
+    const lab=el('text',{x:s.p[0]+16,y:s.p[1]-14,'font-size':'11','font-weight':'800',fill:s.c},g);lab.textContent=s.t;
+    let r=8;(function step(){r+=1.5;ring.setAttribute('r',r);ring.setAttribute('stroke-opacity',Math.max(0,1-(r-8)/34));
+      if(r-8<34)requestAnimationFrame(step);else{setTimeout(nxt,120);}})();
+  })();
+}
+/* side list + table */
+document.getElementById('celllist').innerHTML=CELLS.map(c=>
+ `<button class="cbtn ${c.id===sel?'on':''}" data-c="${c.id}"><span class="cd" style="background:${c.c}"></span>${c.name}<span class="ct">${c.short}</span></button>`).join('');
+document.querySelectorAll('.cbtn').forEach(b=>b.addEventListener('click',()=>pick(b.dataset.c)));
+document.getElementById('itable').innerHTML='<tr><th>Cell type</th><th>Compartment targeted</th><th>Firing</th><th>Functional role</th></tr>'+
+ CELLS.map(c=>`<tr><td class="cn"><i style="background:${c.c}"></i>${c.name}</td><td>${c.target}</td><td>${c.firing}</td><td>${c.fn}</td></tr>`).join('');
+document.querySelectorAll('#ctl button').forEach(b=>b.addEventListener('click',()=>{
+  const a=b.dataset.a;
+  if(a==='all'){showAll=!showAll;b.classList.toggle('on',showAll);b.textContent=showAll?'Show all':'Focus selected';applyFocus();}
+  if(a==='fire')fire();
+  if(a==='disinhib')disinhib();
+}));
+build();pick('pv');
+
+/* ==================== SCHIZOPHRENIA RECEPTOR ZOOM ==================== */
+const SZ=[
+ {n:1,id:'nmda',name:'NMDA receptor on the PV interneuron',c:'#2f6fd0',dir:'▼',chg:'Hypofunction',
+  what:'Glutamatergic drive onto fast-spiking PV interneurons acts largely through NMDA receptors. If those receptors are hypofunctional, the inhibitory cell is under-driven.',
+  cons:'Less PV firing → less GABA released → <b>disinhibition of pyramidal cells</b>, excess and poorly-timed glutamate, and degraded gamma synchrony.',
+  ev:'Inferred from pharmacology: NMDA antagonists (ketamine, PCP) reproduce positive, negative and cognitive symptoms in healthy volunteers. Strong hypothesis, indirect human evidence.'},
+ {n:2,id:'gad67',name:'GAD67 / GABA synthesis in the PV cell',c:'#e03131',dir:'▼',chg:'GAD67 (GAD1) and parvalbumin reduced',
+  what:'GAD67 is the enzyme that synthesises GABA. Its mRNA is reduced in prefrontal cortex, concentrated in parvalbumin-expressing neurons; parvalbumin itself is also reduced.',
+  cons:'Less GABA available for release at the perisomatic synapse — the inhibitory brake on pyramidal output is weakened at source.',
+  ev:'One of the most replicated post-mortem findings in schizophrenia. Note that post-mortem tissue reflects lifetime illness and medication exposure.'},
+ {n:3,id:'ais',name:'Chandelier synapse on the axon initial segment',c:'#d6336c',dir:'▼▲',chg:'GAT-1 reduced · GABA<sub>A</sub> α2 increased',
+  what:'At the axo-axonic synapse, the GABA membrane transporter GAT-1 is reduced in chandelier cartridges, while postsynaptic GABA<sub>A</sub> receptors containing the α2 subunit are <i>increased</i> on the pyramidal axon initial segment.',
+  cons:'These run in opposite directions. The α2 increase is generally read as <b>compensatory</b> — the postsynaptic cell adding receptors because less GABA is arriving at the site where spikes are initiated.',
+  ev:'Well characterised in post-mortem prefrontal cortex; the compensatory interpretation is inference rather than demonstration.'},
+ {n:4,id:'spine',name:'Dendritic spine &amp; complement-mediated pruning',c:'#0ca678',dir:'▼',chg:'Spine density reduced · C4 pruning increased',
+  what:'Layer-3 pyramidal neurons show reduced dendritic spine density. Genetically, the strongest common-variant signal in schizophrenia sits in the MHC locus and is driven by structural variation in <b>complement component 4 (C4)</b>, which tags synapses for microglial elimination.',
+  cons:'Excessive adolescent synaptic pruning would thin exactly the cortico-cortical connections that layer 3 uses to talk to other areas — a plausible route from genetic risk to reduced connectivity.',
+  ev:'Spine loss is robustly replicated post-mortem; the C4 pruning mechanism is strong genetic plus model-system evidence, but the causal chain in humans remains inferred.'},
+ {n:5,id:'da',name:'Dopamine terminal and D2 receptors',c:'#f59f00',dir:'▲',chg:'Presynaptic dopamine synthesis capacity increased',
+  what:'The most robust molecular imaging finding in schizophrenia is elevated <b>presynaptic</b> dopamine synthesis and release capacity in the associative striatum — not, as once assumed, a primary increase in D2 receptor number.',
+  cons:'Excess dopamine signalling is thought to produce <b>aberrant salience</b>: neutral stimuli and internal events are tagged as significant, providing the raw material for delusions. Every effective antipsychotic is a D2 antagonist or partial agonist.',
+  ev:'Very strong — replicated PET/SPECT across many cohorts, and present in clinical-high-risk individuals before onset. D2 receptor upregulation itself is modest and confounded by medication.'}
+];
+const szsvg=document.getElementById('szsvg');
+let szsel='nmda';
+function szbuild(){
+  szsvg.innerHTML='';
+  const defs=el('defs',{},szsvg);
+  const g=el('marker',{id:'szar',viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'},defs);
+  el('path',{d:'M0 0 L10 5 L0 10 z',fill:'#98a1b4'},g);
+
+  /* ---- pyramidal cell (centre-right) ---- */
+  const P=el('g',{},szsvg);
+  el('path',{d:'M356 296 L378 336 L334 336 Z',fill:'#2f6fd0',stroke:'#1f4e94','stroke-width':1.5},P);
+  el('path',{d:'M356 296 L356 130',stroke:'#2f6fd0','stroke-width':4.5,fill:'none'},P);
+  el('path',{d:'M356 336 L356 372',stroke:'#1f4e94','stroke-width':5,id:'szais'},P);
+  el('path',{d:'M356 372 L356 452',stroke:'#2f6fd0','stroke-width':2.4,fill:'none'},P);
+  el('text',{x:386,y:318,'font-size':'11','font-weight':'800',fill:'#1f4e94'},P).textContent='pyramidal';
+  el('text',{x:366,y:364,'font-size':'9.5','font-weight':'700',fill:'#1f4e94'},P).textContent='AIS';
+  /* spine on apical dendrite */
+  el('path',{d:'M356 186 L322 176',stroke:'#2f6fd0','stroke-width':2.4},P);
+  el('circle',{cx:316,cy:174,r:7,fill:'#2f6fd0'},P);
+  el('text',{x:268,y:158,'font-size':'9.5','font-weight':'700',fill:'#2f6fd0'},P).textContent='spine';
+
+  /* ---- PV interneuron (left) ---- */
+  const V=el('g',{},szsvg);
+  el('circle',{cx:150,cy:296,r:22,fill:'#e03131','fill-opacity':0.9,id:'szpv'},V);
+  el('text',{x:150,y:301,'text-anchor':'middle','font-size':'12','font-weight':'800',fill:'#fff'},V).textContent='PV';
+  el('path',{d:'M150 274 L150 214',stroke:'#e03131','stroke-width':3,fill:'none'},V);           /* dendrite up */
+  el('path',{d:'M172 300 Q250 312 322 322',stroke:'#e03131','stroke-width':3,fill:'none',id:'szpvax'},V); /* axon to soma */
+  [[280,316],[306,320],[322,324]].forEach(b=>el('circle',{cx:b[0],cy:b[1],r:4,fill:'#e03131'},V));
+  el('text',{x:112,y:338,'font-size':'9.5','font-weight':'700',fill:'#e03131'},V).textContent='PV basket';
+
+  /* glutamatergic terminal onto PV dendrite */
+  el('path',{d:'M96 150 L134 196',stroke:'#2f6fd0','stroke-width':3,fill:'none'},szsvg);
+  el('ellipse',{cx:140,cy:203,rx:14,ry:9,fill:'#2f6fd0','fill-opacity':0.85},szsvg);
+  el('text',{x:52,y:142,'font-size':'9.5','font-weight':'700',fill:'#2f6fd0'},szsvg).textContent='glutamate';
+
+  /* chandelier onto AIS */
+  el('circle',{cx:474,cy:394,r:17,fill:'#d6336c','fill-opacity':0.9},szsvg);
+  el('text',{x:474,y:399,'text-anchor':'middle','font-size':'9.5','font-weight':'800',fill:'#fff'},szsvg).textContent='ChC';
+  el('path',{d:'M458 390 Q412 376 380 358',stroke:'#d6336c','stroke-width':2.6,fill:'none'},szsvg);
+  [0,1,2].forEach(i=>el('rect',{x:362,y:344+i*9,width:9,height:5,rx:2,fill:'#d6336c'},szsvg));
+
+  /* dopamine terminal */
+  el('path',{d:'M556 176 Q470 190 400 214',stroke:'#f59f00','stroke-width':3,fill:'none'},szsvg);
+  el('ellipse',{cx:396,cy:216,rx:14,ry:9,fill:'#f59f00','fill-opacity':0.9},szsvg);
+  el('text',{x:520,y:162,'font-size':'9.5','font-weight':'700',fill:'#f59f00'},szsvg).textContent='dopamine';
+
+  /* microglia near spine */
+  el('circle',{cx:246,cy:126,r:15,fill:'#0ca678','fill-opacity':0.85},szsvg);
+  el('text',{x:246,y:130,'text-anchor':'middle','font-size':'8.5','font-weight':'800',fill:'#fff'},szsvg).textContent='MG';
+  el('path',{d:'M258 136 Q286 156 308 168',stroke:'#0ca678','stroke-width':2,fill:'none','stroke-dasharray':'4 3'},szsvg);
+  el('text',{x:196,y:106,'font-size':'9.5','font-weight':'700',fill:'#0ca678'},szsvg).textContent='microglia · C4';
+
+  /* effects layer then hotspots on top */
+  el('g',{id:'szfx'},szsvg);
+  const HS={nmda:[140,203],gad67:[150,296],ais:[366,352],spine:[316,174],da:[396,216]};
+  const H=el('g',{},szsvg);
+  SZ.forEach(s=>{const p=HS[s.id];const grp=el('g',{style:'cursor:pointer','data-h':s.id},H);
+    el('circle',{cx:p[0],cy:p[1],r:13,fill:'#fff',stroke:s.c,'stroke-width':3},grp);
+    el('text',{x:p[0],y:p[1]+4.5,'text-anchor':'middle','font-size':'12','font-weight':'800',fill:s.c},grp).textContent=s.n;
+    grp.addEventListener('click',()=>szpick(s.id));});
+}
+function szpick(id){szsel=id;
+  document.querySelectorAll('.szbtn').forEach(b=>b.classList.toggle('on',b.dataset.s===id));
+  szsvg.querySelectorAll('[data-h]').forEach(g=>g.setAttribute('opacity',g.dataset.h===id?1:0.45));
+  const s=SZ.find(x=>x.id===id);
+  document.getElementById('szdetail').innerHTML=
+   `<div class="dname"><span class="dd" style="background:${s.c}"></span>${s.n}. ${s.name}</div>
+    <div class="dsub">${s.dir} ${s.chg}</div>
+    <div class="drow"><div class="k">What changes</div><div class="v">${s.what}</div></div>
+    <div class="drow"><div class="k">Consequence</div><div class="v">${s.cons}</div></div>
+    <div class="drow"><div class="k">Strength of evidence</div><div class="v">${s.ev}</div></div>`;
+}
+function szcascade(){
+  const fx=document.getElementById('szfx');fx.innerHTML='';
+  const seq=[[140,203,'#2f6fd0','NMDAR hypofunction'],[150,296,'#e03131','PV under-driven'],[300,318,'#e03131','less GABA released'],[356,316,'#2f6fd0','pyramidal disinhibited'],[356,170,'#2f6fd0','excess, noisy glutamate']];
+  let i=0;
+  (function nxt(){if(i>=seq.length){setTimeout(()=>fx.innerHTML='',1200);return;}
+    const s=seq[i++];const grp=el('g',{},fx);
+    const ring=el('circle',{cx:s[0],cy:s[1],r:9,fill:'none',stroke:s[2],'stroke-width':3.4},grp);
+    const lab=el('text',{x:Math.min(s[0]+17,430),y:s[1]-16,'font-size':'11','font-weight':'800',fill:s[2]},grp);lab.textContent=s[3];
+    let r=9;(function step(){r+=1.6;ring.setAttribute('r',r);ring.setAttribute('stroke-opacity',Math.max(0,1-(r-9)/32));
+      if(r-9<32)requestAnimationFrame(step);else setTimeout(nxt,110);})();})();
+}
+document.getElementById('szlist').innerHTML=SZ.map(s=>
+ `<button class="cbtn szbtn ${s.id===szsel?'on':''}" data-s="${s.id}"><span class="cd" style="background:${s.c}"></span>${s.n}. ${s.name}<span class="ct">${s.dir} ${s.chg}</span></button>`).join('');
+document.querySelectorAll('.szbtn').forEach(b=>b.addEventListener('click',()=>szpick(b.dataset.s)));
+document.querySelectorAll('#szctl button').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.a==='cascade')szcascade();else{document.getElementById('szfx').innerHTML='';szpick('nmda');}}));
+szbuild();szpick('nmda');
+</script>
+</body>
+</html>

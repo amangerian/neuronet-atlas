@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroNet Atlas — The Cortical Column</title>
+<style>
+  :root{--bg:#eef1f8;--panel:#fff;--panel2:#f5f7fc;--line:#e0e5f0;--line2:#eef1f8;--ink:#1d2536;--muted:#5c667a;--faint:#98a1b4;
+    --l1:#9c36b5;--l23:#d6336c;--l4:#1c7ed6;--l5:#e8590c;--l6:#0b7285;--wm:#495057;--accent:#5b4bd6;--inc:#2f9e44;--dec:#e03131}
+  *{box-sizing:border-box}html,body{margin:0;padding:0}
+  body{background:radial-gradient(1100px 620px at 82% -8%,#fff 0%,var(--bg) 52%) fixed,var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:#2f6fd0;text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px 70px}
+  header.top{padding:36px 0 18px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .brand{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+  .brand .logo{width:42px;height:42px;border-radius:12px;flex:none;background:linear-gradient(135deg,#5b4bd6,#3f8bff 60%,#2f9e44);box-shadow:0 8px 22px rgba(91,75,214,.28);position:relative}
+  .brand .logo::after{content:"";position:absolute;inset:9px;border-radius:50%;border:2px solid rgba(255,255,255,.95);
+    background:radial-gradient(3px 3px at 50% 20%,#fff 60%,transparent),radial-gradient(3px 3px at 22% 60%,#fff 60%,transparent),radial-gradient(3px 3px at 78% 62%,#fff 60%,transparent)}
+  .brand h1{font-size:14px;letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--muted);font-weight:600}
+  .brand h1 b{color:var(--ink);font-weight:800}
+  h2{font-size:33px;margin:6px 0 8px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14.5px;max-width:840px;margin:0}
+  .nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .nav a{font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:10px;border:1.5px solid var(--line);background:var(--panel);color:var(--ink)}
+  .nav a:hover{border-color:#b9c2d8;text-decoration:none}
+  .nav a.cur{background:#1d2536;color:#fff;border-color:#1d2536}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 18px 44px -26px rgba(30,45,90,.32);margin-bottom:22px}
+  .chead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--panel2);flex-wrap:wrap}
+  .chead .t{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .ctrls{display:flex;gap:6px;flex-wrap:wrap}
+  .ctrls button{font:inherit;font-size:12px;font-weight:650;color:var(--muted);background:var(--panel);border:1px solid var(--line);padding:6px 11px;border-radius:8px;cursor:pointer}
+  .ctrls button:hover{color:var(--ink);border-color:#c3ccdd}.ctrls button.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+  .stage{position:relative;background:radial-gradient(700px 420px at 50% 10%,#fbfcff 0%,#f3f6fc 78%)}
+  .colgrid{display:grid;grid-template-columns:1fr 300px}
+  @media(max-width:860px){.colgrid{grid-template-columns:1fr}}
+  .side{border-left:1px solid var(--line);background:var(--panel2);padding:15px 16px}
+  @media(max-width:860px){.side{border-left:none;border-top:1px solid var(--line)}}
+  .side .sh{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint);font-weight:800;margin-bottom:8px}
+  .lname{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:800;margin-bottom:2px}
+  .lname .ld{width:12px;height:12px;border-radius:3px}
+  .lsub{font-size:11.5px;color:var(--faint);font-style:italic;margin-bottom:11px}
+  .lrow{margin-bottom:10px}
+  .lrow .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:800;margin-bottom:2px}
+  .lrow .v{font-size:12.5px;color:var(--muted);line-height:1.45}
+  .lrow .v b{color:var(--ink)}
+  .pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;margin:2px 3px 0 0;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+  .legend{display:flex;flex-wrap:wrap;gap:11px 18px;padding:12px 18px;border-top:1px solid var(--line);background:var(--panel2);font-size:11.5px;color:var(--muted)}
+  .legend .li{display:flex;align-items:center;gap:7px}
+  .legend .sw{width:12px;height:12px;border-radius:3px}.legend .sw.rd{border-radius:50%}
+  .block{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px 19px;margin-bottom:18px}
+  .block h4{margin:0 0 12px;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:9px}
+  .block h4 .bar{width:22px;height:3px;border-radius:2px;background:var(--accent)}
+  .block p{font-size:14px;color:var(--muted);margin:0 0 11px;max-width:900px}
+  .block p:last-child{margin-bottom:0}.block p b{color:var(--ink)}
+  .ltable{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+  .ltable th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint);font-weight:800;padding:0 10px 9px 0}
+  .ltable td{padding:10px 10px 10px 0;border-top:1px solid var(--line2);color:var(--muted);vertical-align:top;line-height:1.45}
+  .ltable td.ln{font-weight:750;color:var(--ink);white-space:nowrap}
+  .ltable td.ln i{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px}
+  .tw{overflow-x:auto}
+  footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12px}
+  @media(max-width:720px){
+    .wrap{padding:0 13px 50px}h2{font-size:24px}.sub{font-size:13.5px}
+    header.top{padding:24px 0 14px}.brand .logo{width:36px;height:36px}.brand h1{font-size:11.5px}
+    .stage{overflow-x:auto;-webkit-overflow-scrolling:touch}.stage svg{min-width:620px}
+    .block{padding:14px 15px}.block p{font-size:13.5px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo"></div><h1><b>NeuroNet Atlas</b> · Cellular &amp; Columnar Scale</h1></div>
+    <h2>The Cortical Column</h2>
+    <p class="sub">The cortex is only ~2.5&nbsp;mm thick, but it is not uniform: it is organised into six layers with a highly stereotyped pattern of inputs and outputs. This <b>canonical microcircuit</b> repeats across the whole cortical sheet. Press play to watch a signal enter from the thalamus and propagate through the column; click any layer for detail.</p>
+    <div class="nav">
+      <a href="index.html">← Network Atlas</a>
+      <a href="cortical-column.html" class="cur">Cortical Column</a>
+      <a href="pyramidal-neuron.html">Pyramidal Neuron &amp; Interneurons</a>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="chead"><span class="t">Canonical microcircuit · signal flow</span>
+      <div class="ctrls" id="ctl">
+        <button data-a="play" class="on">⏸ Pause</button>
+        <button data-a="speed">Speed ×0.5</button>
+        <button data-a="ff" class="on">Feedforward</button>
+        <button data-a="fb" class="on">Feedback</button>
+        <button data-a="out" class="on">Outputs</button>
+      </div></div>
+    <div class="colgrid">
+      <div class="stage" id="stage"><svg id="col" viewBox="0 0 660 620"></svg></div>
+      <div class="side">
+        <div class="sh">Layer detail</div>
+        <div id="ldetail"></div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="li"><span class="sw rd" style="background:#1c7ed6"></span>Thalamic driver input</div>
+      <div class="li"><span class="sw rd" style="background:#9c36b5"></span>Feedback / top-down</div>
+      <div class="li"><span class="sw rd" style="background:#e8590c"></span>Subcortical output</div>
+      <div class="li"><span class="sw rd" style="background:#d6336c"></span>Cortico-cortical output</div>
+      <div class="li"><span class="sw rd" style="background:#0b7285"></span>Corticothalamic feedback</div>
+      <div class="li">Click a layer for detail</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>The canonical circuit in one sentence</h4>
+    <p>Driver input from the thalamus arrives in <b>layer 4</b>, is passed up to <b>layer 2/3</b> for local processing and onward transmission to other cortical areas, then down to <b>layer 5</b>, which is the cortex's main output to subcortical structures, and to <b>layer 6</b>, which projects back to the thalamus and regulates its own input. Meanwhile <b>layer 1</b> — almost cell-free — carries top-down feedback onto the apical dendrites of pyramidal cells sitting in the layers below, letting context modulate what the column does with its feedforward input.</p>
+    <p>Two directional streams are worth separating. <b>Feedforward</b> projections originate in layer 2/3 and terminate in layer 4 of the next area up the hierarchy. <b>Feedback</b> projections originate in layers 5/6 and terminate in layer 1, avoiding layer 4 entirely. This asymmetry is the anatomical basis for hierarchical and predictive-processing accounts of cortex.</p>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>Layer by layer</h4>
+    <div class="tw"><table class="ltable" id="ltable"></table></div>
+  </div>
+
+  <div class="block">
+    <h4><span class="bar"></span>Why this matters for the network models</h4>
+    <p>The whole-brain networks in the main atlas are built from signals averaged over millions of these columns. The layer architecture explains several things those coarse models can only describe. <b>Layer 5 thick-tufted cells</b> are coincidence detectors: they fire strongly when basal (feedforward) and apical (feedback, via layer 1) input arrive together — a cellular implementation of "context meets evidence." <b>Layer 6</b> corticothalamic feedback sets the gain on the thalamus, which is directly relevant to the thalamo-cortical dysconnectivity that defines schizophrenia in the network atlas.</p>
+    <p>Note also that the column is not uniform across cortex. Layer 4 is thick in primary sensory areas, thin in association cortex, and effectively absent in motor cortex (which is why motor cortex is called <i>agranular</i>). The canonical circuit is a strong idealisation, not a literal blueprint for every region.</p>
+  </div>
+
+  <footer>Schematic teaching diagram of the canonical cortical microcircuit, after the classical Douglas &amp; Martin formulation and subsequent laminar connectivity work. Proportions and pathway weights are stylised for clarity. Not a substitute for a primary anatomical source.</footer>
+</div>
+
+<script>
+const SVGNS="http://www.w3.org/2000/svg";
+function el(t,a={},p){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+const svg=document.getElementById('col');
+const X0=210,X1=470,W=X1-X0;
+const LAYERS=[
+ {id:'l1',n:'Layer 1',sub:'molecular layer',y0:56,y1:104,c:'#9c36b5',
+  cells:['Sparse neurons','Neurogliaform / NDNF interneurons','Apical dendritic tufts of L2/3 &amp; L5 pyramids'],
+  input:'<b>Top-down feedback</b> from higher cortical areas, matrix (non-specific) thalamic input, and neuromodulators (ACh, NA, 5-HT).',
+  output:'No long-range projection of its own — it acts <i>on</i> the apical tufts passing through it.',
+  fn:'Contextual modulation. Input here does not by itself drive spiking; it changes how strongly the pyramidal cells below respond to their feedforward input.'},
+ {id:'l23',n:'Layer 2/3',sub:'supragranular',y0:104,y1:216,c:'#d6336c',
+  cells:['Small &amp; medium pyramidal cells','PV basket, SST, VIP interneurons'],
+  input:'Principally from <b>layer 4</b> of the same column; also dense horizontal connections from neighbouring columns.',
+  output:'<b>Cortico-cortical</b> — the main feedforward projection to the next area up the hierarchy (terminating in <i>its</i> layer 4), plus callosal projections and a descending projection to layer 5.',
+  fn:'Local computation and feature integration; the cortex\'s principal channel for talking to other cortical areas. Highly plastic.'},
+ {id:'l4',n:'Layer 4',sub:'granular / internal granular',y0:216,y1:286,c:'#1c7ed6',
+  cells:['Spiny stellate cells','Star pyramidal cells','Fast-spiking PV interneurons'],
+  input:'<b>Driver input from the core thalamus</b> — the principal entry point for sensory information into the cortex.',
+  output:'Predominantly vertical, to <b>layer 2/3</b> of the same column.',
+  fn:'The input gateway. Thick in primary sensory cortex, thin in association cortex, and essentially absent in motor cortex (hence <i>agranular</i> cortex).'},
+ {id:'l5',n:'Layer 5',sub:'infragranular / internal pyramidal',y0:286,y1:406,c:'#e8590c',
+  cells:['L5a thin-tufted pyramids (cortico-cortical, striatal)','L5b thick-tufted pyramids (subcortical projection)','Martinotti (SST) interneurons'],
+  input:'From <b>layer 2/3</b> above, plus direct thalamic input and — crucially — <b>top-down feedback onto their apical tufts in layer 1</b>.',
+  output:'<b>The cortex\'s main output to subcortical targets</b>: striatum, superior colliculus, pons, brainstem and spinal cord, plus higher-order thalamus.',
+  fn:'Output and coincidence detection. Thick-tufted L5b cells fire in bursts when basal (feedforward) and apical (feedback) inputs arrive together — a cellular mechanism for combining evidence with context.'},
+ {id:'l6',n:'Layer 6',sub:'multiform / polymorphic',y0:406,y1:492,c:'#0b7285',
+  cells:['Corticothalamic pyramidal cells','Cortico-cortical pyramids','Diverse interneurons'],
+  input:'From <b>layer 5</b> and from ascending collaterals; also receives thalamic input.',
+  output:'<b>Corticothalamic feedback</b> to the same thalamic nucleus that drove the column, plus a strong local projection back into layer 4.',
+  fn:'Gain control. Layer 6 regulates the very thalamic input the column receives — a closed loop that sets sensitivity and sharpens selectivity.'}
+];
+/* pathways: pts = polyline; c = colour; kind = ff|fb|out */
+const PATHS=[
+ {id:'thal',kind:'ff',c:'#1c7ed6',lab:'Thalamus (core)',pts:[[70,560],[70,251],[X0,251]]},
+ {id:'l4_l23',kind:'ff',c:'#1c7ed6',pts:[[300,246],[300,170]]},
+ {id:'l23_l5',kind:'ff',c:'#d6336c',pts:[[350,180],[350,336]]},
+ {id:'l5_l6',kind:'ff',c:'#e8590c',pts:[[320,366],[320,446]]},
+ {id:'l6_l4',kind:'ff',c:'#0b7285',pts:[[262,446],[262,256]]},
+ {id:'fb',kind:'fb',c:'#9c36b5',lab:'Feedback from higher cortex',pts:[[600,560],[600,80],[X1,80]]},
+ {id:'fb2',kind:'fb',c:'#9c36b5',pts:[[600,300],[600,340],[X1,340]]},
+ {id:'out23',kind:'out',c:'#d6336c',lab:'→ other cortical areas',pts:[[X1,150],[560,150],[560,120],[640,120]]},
+ {id:'out5',kind:'out',c:'#e8590c',lab:'→ striatum, colliculus, brainstem, cord',pts:[[X1,376],[520,376],[520,556],[640,556]]},
+ {id:'out6',kind:'out',c:'#0b7285',lab:'→ thalamus (feedback)',pts:[[X0,466],[130,466],[130,590],[70,590]]}
+];
+function plen(pts){let L=0;for(let i=1;i<pts.length;i++)L+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);return L;}
+function pAt(pts,t){const L=plen(pts);let d=t*L;for(let i=1;i<pts.length;i++){const s=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);
+  if(d<=s){const f=s?d/s:0;return [pts[i-1][0]+(pts[i][0]-pts[i-1][0])*f, pts[i-1][1]+(pts[i][1]-pts[i-1][1])*f];}d-=s;}return pts[pts.length-1];}
+function build(){
+  svg.innerHTML='';
+  const defs=el('defs',{},svg);
+  ['#1c7ed6','#9c36b5','#e8590c','#d6336c','#0b7285'].forEach((c,i)=>{
+    const m=el('marker',{id:'ah'+i,viewBox:'0 0 10 10',refX:'9',refY:'5',markerWidth:'6',markerHeight:'6',orient:'auto-start-reverse'},defs);
+    el('path',{d:'M0 0 L10 5 L0 10 z',fill:c},m);});
+  /* white matter */
+  el('rect',{x:X0,y:492,width:W,height:70,fill:'#e9ecf3',stroke:'#d6dce8'},svg);
+  el('text',{x:(X0+X1)/2,y:534,'text-anchor':'middle','font-size':'12','font-weight':'700',fill:'#7b8496'},svg).textContent='white matter';
+  /* layers */
+  LAYERS.forEach(L=>{
+    const g=el('g',{style:'cursor:pointer'},svg);
+    el('rect',{x:X0,y:L.y0,width:W,height:L.y1-L.y0,fill:L.c,'fill-opacity':'0.12',stroke:L.c,'stroke-opacity':'0.5','stroke-width':1.2,'data-l':L.id},g);
+    el('text',{x:X0+13,y:L.y0+22,'font-size':'14','font-weight':'800',fill:L.c},g).textContent=L.n;
+    el('text',{x:X0+13,y:L.y0+37,'font-size':'10.5',fill:'#8a93a5'},g).textContent=L.sub;
+    g.addEventListener('click',()=>sel(L.id));
+    g.addEventListener('mouseenter',()=>g.style.opacity=0.86);
+    g.addEventListener('mouseleave',()=>g.style.opacity=1);
+  });
+  /* external boxes */
+  el('rect',{x:24,y:540,width:92,height:40,rx:8,fill:'#fff',stroke:'#1c7ed6','stroke-width':1.6},svg);
+  el('text',{x:70,y:558,'text-anchor':'middle','font-size':'11.5','font-weight':'800',fill:'#1c7ed6'},svg).textContent='THALAMUS';
+  el('text',{x:70,y:571,'text-anchor':'middle','font-size':'9.5',fill:'#8a93a5'},svg).textContent='core / driver';
+  el('rect',{x:556,y:540,width:98,height:40,rx:8,fill:'#fff',stroke:'#9c36b5','stroke-width':1.6},svg);
+  el('text',{x:605,y:558,'text-anchor':'middle','font-size':'11','font-weight':'800',fill:'#9c36b5'},svg).textContent='HIGHER';
+  el('text',{x:605,y:571,'text-anchor':'middle','font-size':'9.5',fill:'#8a93a5'},svg).textContent='cortical areas';
+  /* paths */
+  const pg=el('g',{},svg);
+  PATHS.forEach(P=>{
+    const d=P.pts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ');
+    const mk=P.c==='#1c7ed6'?0:P.c==='#9c36b5'?1:P.c==='#e8590c'?2:P.c==='#d6336c'?3:4;
+    el('path',{d,fill:'none',stroke:P.c,'stroke-width':2,'stroke-opacity':0.42,'marker-end':'url(#ah'+mk+')','data-k':P.kind},pg);
+    if(P.lab){const last=P.pts[P.pts.length-1],first=P.pts[0];
+      const lx=P.kind==='out'?last[0]:first[0], ly=P.kind==='out'?last[1]-9:first[1]-10;
+      const t=el('text',{x:lx,y:ly,'font-size':'10','font-weight':'700',fill:P.c,'data-k':P.kind},svg);
+      t.setAttribute('text-anchor',P.kind==='out'?(lx>500?'end':'start'):'start');t.textContent=P.lab;}
+  });
+  /* particle layer */
+  el('g',{id:'parts'},svg);
+}
+let parts=[],playing=true,speed=0.5,show={ff:true,fb:true,out:true};
+function seed(){parts=[];PATHS.forEach(P=>{const n=P.pts.length>2?3:2;
+  for(let i=0;i<n;i++)parts.push({P,t:i/n,c:el('circle',{r:4,fill:P.c},document.getElementById('parts'))});});}
+function frame(){
+  if(playing)parts.forEach(p=>{p.t+=0.0032*speed*(p.P.kind==='out'?1.1:1);if(p.t>1)p.t=0;});
+  parts.forEach(p=>{const on=show[p.P.kind];p.c.setAttribute('opacity',on?0.95:0);
+    if(on){const q=pAt(p.P.pts,p.t);p.c.setAttribute('cx',q[0]);p.c.setAttribute('cy',q[1]);}});
+  requestAnimationFrame(frame);
+}
+function applyShow(){svg.querySelectorAll('[data-k]').forEach(n=>n.setAttribute('opacity',show[n.dataset.k]?(n.tagName==='text'?1:0.42):0.06));}
+function sel(id){
+  const L=LAYERS.find(x=>x.id===id)||LAYERS[2];
+  document.getElementById('ldetail').innerHTML=
+    `<div class="lname"><span class="ld" style="background:${L.c}"></span>${L.n}</div><div class="lsub">${L.sub}</div>
+     <div class="lrow"><div class="k">Principal cells</div><div class="v">${L.cells.map(c=>`<span class="pill">${c}</span>`).join('')}</div></div>
+     <div class="lrow"><div class="k">Input</div><div class="v">${L.input}</div></div>
+     <div class="lrow"><div class="k">Output</div><div class="v">${L.output}</div></div>
+     <div class="lrow"><div class="k">Functional role</div><div class="v">${L.fn}</div></div>`;
+  svg.querySelectorAll('[data-l]').forEach(r=>r.setAttribute('fill-opacity',r.dataset.l===id?0.30:0.12));
+}
+document.querySelectorAll('#ctl button').forEach(b=>b.addEventListener('click',()=>{
+  const a=b.dataset.a;
+  if(a==='play'){playing=!playing;b.classList.toggle('on',playing);b.textContent=playing?'⏸ Pause':'▶ Play';return;}
+  if(a==='speed'){const S=[0.25,0.5,1,2];speed=S[(S.indexOf(speed)+1)%S.length];b.textContent='Speed ×'+speed;return;}
+  show[a]=!show[a];b.classList.toggle('on',show[a]);applyShow();
+}));
+/* layer table */
+document.getElementById('ltable').innerHTML='<tr><th>Layer</th><th>Main input</th><th>Main output</th><th>Functional role</th></tr>'+
+ LAYERS.map(L=>`<tr><td class="ln"><i style="background:${L.c}"></i>${L.n}</td><td>${L.input}</td><td>${L.output}</td><td>${L.fn}</td></tr>`).join('');
+build();seed();applyShow();sel('l4');frame();
+</script>
+</body>
+</html>
